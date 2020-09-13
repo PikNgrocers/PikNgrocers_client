@@ -1,1 +1,1 @@
-# PikNgrocers
+# PikNgrocers client app
