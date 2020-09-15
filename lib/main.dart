@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pikngrocers_client/screens/login_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -7,6 +8,8 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MaterialApp(
+      home: LoginPage(),
+    );
   }
 }
