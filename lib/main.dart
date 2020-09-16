@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pikngrocers_client/screens/Register_screen.dart';
 import 'package:pikngrocers_client/screens/login_screen.dart';
 
 void main() {
@@ -9,7 +10,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginPage(),
+      initialRoute: '/',
+      routes: {
+        '/':(context) => LoginPage(),
+        '/register':(context) => RegisterPage(),
+      },
     );
   }
 }
