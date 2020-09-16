@@ -12,7 +12,7 @@ class LoginPage extends StatelessWidget {
           children: <Widget> [
             Expanded(
               child: Center(
-                child: Image.asset("assets/images/selected.png"),
+                child: Image.asset("assets/images/logo.png"),
               ),
             ),
             Container(height: 400,
