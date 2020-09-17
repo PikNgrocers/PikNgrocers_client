@@ -131,7 +131,7 @@ class MobileNumberVerify extends StatelessWidget {
               color: Colors.black54,
               fontSize: 13.0,
             ),
-            //TODO: autofocus: true,
+            autofocus: true,
             cursorColor: kMobileVerifyFontColor,
             decoration: InputDecoration(
               filled: true,
