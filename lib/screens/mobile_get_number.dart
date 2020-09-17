@@ -89,6 +89,8 @@ class MobileNumberVerify extends StatelessWidget {
                       onPressed: () {},
                       color: Colors.white,
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
                             'assets/images/google_logo.png',
@@ -96,8 +98,11 @@ class MobileNumberVerify extends StatelessWidget {
                             fit: BoxFit.fill,
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 24.0),
-                            child: Text('Sign in with Google',style: TextStyle(color: Colors.black54),),
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              'Sign in with Google',
+                              style: TextStyle(color: Colors.black87),
+                            ),
                           ),
                         ],
                       ),
@@ -153,7 +158,6 @@ class MobileNumberVerify extends StatelessWidget {
               if (_formkey.currentState.validate()) {
                 Navigator.pushNamed(context, '/verify_screen');
               }
-
             },
             padding: EdgeInsets.all(0),
             color: Colors.black,
