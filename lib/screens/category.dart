@@ -23,7 +23,7 @@ class _CategoryPageState extends State<CategoryPage> {
           style: TextStyle(fontSize: 15, color: kCategoryColor),
         ),
       ),
-      body: SafeArea(
+     body: SafeArea(
         child: Container(
           margin: EdgeInsets.all(10),
           color: Colors.white,
