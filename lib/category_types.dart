@@ -10,8 +10,27 @@ List<CategoryType> categoryTypes = <CategoryType>[
   CategoryType('Fruit & Vegetables', 8),
 ];
 
+List<GroceryStaples> groceryStaples = <GroceryStaples>[
+  GroceryStaples('Salt,Sugar & Jaggery'),
+  GroceryStaples('Atta & Other Flours'),
+  GroceryStaples('Dal & Pulses'),
+  GroceryStaples('Rice & Other Grains'),
+  GroceryStaples('Edible'),
+  GroceryStaples('Ghee & Vanaspati'),
+  GroceryStaples('Spices & Ready Masala'),
+  GroceryStaples('Poha & Daliya'),
+  GroceryStaples('Dry Fruit & Nuts'),
+  GroceryStaples('Milk Products'),
+  GroceryStaples('Pets'),
+];
+
 class CategoryType {
   final String categoryTitle;
   final int categoryValue;
   CategoryType(this.categoryTitle, this.categoryValue);
+}
+
+class GroceryStaples {
+  final String title;
+  GroceryStaples(this.title);
 }

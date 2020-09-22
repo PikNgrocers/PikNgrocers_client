@@ -2,10 +2,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pikngrocers_client/constants.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
+  @override
+  _RegisterPageState createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
+
   final _passwordController = TextEditingController();
+
   final _formkey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:pikngrocers_client/constants.dart';
 
-class MobileNumberOTP extends StatelessWidget {
+class MobileNumberOTP extends StatefulWidget {
+  @override
+  _MobileNumberOTPState createState() => _MobileNumberOTPState();
+}
+
+class _MobileNumberOTPState extends State<MobileNumberOTP> {
+  TextEditingController _otpController = TextEditingController();
+
+  @override
+  void dispose() {
+    _otpController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +79,7 @@ class MobileNumberOTP extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextField(
+                      controller: _otpController,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         hintText: 'OTP Number',

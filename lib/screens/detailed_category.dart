@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pikngrocers_client/category_types.dart';
 import 'package:pikngrocers_client/constants.dart';
 
 class DetailedCategory extends StatefulWidget {
@@ -12,9 +13,20 @@ class DetailedCategory extends StatefulWidget {
 }
 
 class _DetailedCategoryState extends State<DetailedCategory> {
+  List<Tab> _tabBarLists;
+  List<Center> _tabBarListsViews;
+  @override
+  void initState() {
+    _tabBarLists = List.generate(groceryStaples.length, (index) => Tab(child: Text(groceryStaples[index].title),));
+    _tabBarListsViews = List.generate(groceryStaples.length, (index) => Center(child: Text(groceryStaples[index].title),),);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DefaultTabController(
+      length: groceryStaples.length,
+      child: Scaffold(
         appBar: AppBar(
           backgroundColor: kCategoryColor,
           elevation: 0,
@@ -28,40 +40,19 @@ class _DetailedCategoryState extends State<DetailedCategory> {
                   Icons.search,
                 ),
                 onPressed: () {
-                  showSearch(context: context, delegate: Search());
+                  // showSearch(context: context, delegate: Search());
                 })
           ],
-          // bottom: PreferredSize(
-          //   preferredSize: Size(10, 30),
-          //   child: TextField(
-          //     decoration: InputDecoration(
-          //       filled: true,
-          //         fillColor: Colors.white,
-          //         suffixIcon: Icon(Icons.search,color: kCategoryColor,),
-          //         contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-          //         hintText: 'Search eg. atta,salt,pepper',
-          //         isDense: true,
-          //         enabledBorder: OutlineInputBorder(
-          //           borderSide: BorderSide(color: kCategoryColor,width: 2),
-          //           borderRadius: BorderRadius.circular(50),
-          //         ),
-          //         focusedBorder: OutlineInputBorder(
-          //           borderRadius: BorderRadius.circular(50),
-          //           borderSide: BorderSide(color: kCategoryColor),
-          //         )),
-          //     style: TextStyle(
-          //       fontSize: 13,
-          //       color: Colors.grey,
-          //     ),
-          //   ),
-          // ),
-        ),
-        body: Container(
-          margin: EdgeInsets.all(10),
-          child: Column(
-            children: [],
+          bottom: TabBar(
+            isScrollable: true,
+            tabs: _tabBarLists,
           ),
-        ));
+        ),
+        body: TabBarView(
+          children: _tabBarListsViews,
+        ),
+      ),
+    );
   }
 }
 

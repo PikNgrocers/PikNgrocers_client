@@ -2,9 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pikngrocers_client/constants.dart';
 
-class MobileNumberVerify extends StatelessWidget {
-  final _formkey = GlobalKey<FormState>();
+class MobileNumberVerify extends StatefulWidget {
+  @override
+  _MobileNumberVerifyState createState() => _MobileNumberVerifyState();
+}
 
+class _MobileNumberVerifyState extends State<MobileNumberVerify> {
+  final _formkey = GlobalKey<FormState>();
+  final _mobileNumberController = TextEditingController();
+
+  @override
+  void dispose() {
+    _mobileNumberController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,6 +135,7 @@ class MobileNumberVerify extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            controller: _mobileNumberController,
             keyboardType: TextInputType.number,
             validator: (val) =>
                 val.isEmpty ? "Phone Number Should not empty" : null,

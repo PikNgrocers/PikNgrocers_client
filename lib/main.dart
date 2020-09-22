@@ -15,14 +15,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/home',
+      initialRoute: '/mobile_verify',
       routes: {
         '/login':(context) => LoginPage(),
         '/register':(context) => RegisterPage(),
         '/mobile_verify':(context) => MobileNumberVerify(),
         '/verify_screen':(context) => MobileNumberOTP(),
         '/home':(context) => Home(),
-
       },
     );
   }

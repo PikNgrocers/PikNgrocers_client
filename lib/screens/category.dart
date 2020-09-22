@@ -17,11 +17,10 @@ class _CategoryPageState extends State<CategoryPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Center(
-          child: Text(
-            'All Categories',
-            style: TextStyle(fontSize: 15, color: kCategoryColor),
-          ),
+        centerTitle: true,
+        title: Text(
+          'All Categories',
+          style: TextStyle(fontSize: 15, color: kCategoryColor),
         ),
       ),
       body: SafeArea(
