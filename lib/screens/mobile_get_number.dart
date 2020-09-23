@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pikngrocers_client/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MobileNumberVerify extends StatefulWidget {
   @override
@@ -10,6 +11,9 @@ class MobileNumberVerify extends StatefulWidget {
 class _MobileNumberVerifyState extends State<MobileNumberVerify> {
   final _formkey = GlobalKey<FormState>();
   final _mobileNumberController = TextEditingController();
+
+
+
 
   @override
   void dispose() {
@@ -135,6 +139,7 @@ class _MobileNumberVerifyState extends State<MobileNumberVerify> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            maxLength: 10,
             controller: _mobileNumberController,
             keyboardType: TextInputType.number,
             validator: (val) =>
