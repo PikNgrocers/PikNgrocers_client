@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "141689222091-hgl1n8jgu7hlr09f2vl014qo3vfeuofk.apps.googleusercontent.com",
+          "client_id": "141689222091-e1e2p70niv61059in8l98o4a868qkk26.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.pikngrocers_client",
-            "certificate_hash": "b445ab422a968c326a9701e3100fb53de1d93838"
+            "certificate_hash": "621f6b625fdd666283ccb810919b7dba4cc3d0cc"
           }
         },
         {
