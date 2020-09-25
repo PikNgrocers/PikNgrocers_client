@@ -2,6 +2,7 @@
 
 A new Flutter application.
 hello everyone
+hi everyone
 
 ## Getting Started
 
