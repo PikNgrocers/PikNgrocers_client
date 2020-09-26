@@ -11,7 +11,7 @@ class ProfilePage extends StatelessWidget {
           color: kAccountColor,
           textColor: Colors.white,
           onPressed: (){
-            AuthHelper.logout();
+            AuthHelper().logout();
             Navigator.pushReplacementNamed(context, '/');
           },
           child: Text('Sign Out'),

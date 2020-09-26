@@ -119,7 +119,7 @@ class _MobileNumberVerifyState extends State<MobileNumberVerify> {
                                   _loader = true;
                                 });
                                 final user =
-                                    await AuthHelper.signInWithGoogle();
+                                    await AuthHelper().signInWithGoogle();
                                 if (user == null) {
                                   print("user is null");
                                 } else {
@@ -127,7 +127,9 @@ class _MobileNumberVerifyState extends State<MobileNumberVerify> {
                                       context, '/home');
                                 }
                               } catch (e) {
-                                print("Some errors occurs");
+                                setState(() {
+                                  _loader = false;
+                                });
                                 print(e);
                               }
                             },
@@ -171,8 +173,15 @@ class _MobileNumberVerifyState extends State<MobileNumberVerify> {
             maxLength: 10,
             controller: _mobileNumberController,
             keyboardType: TextInputType.number,
-            validator: (val) =>
-                val.isEmpty ? "Phone Number Should not empty" : null,
+            validator: (val) {
+              if(val.length < 10){
+                return "Invalid Phone Number";
+              }
+              if(val.isEmpty){
+                return "Phone Number should not be empty";
+              }
+              return null;
+            },
             style: TextStyle(
               color: Colors.black54,
               fontSize: 13.0,
@@ -201,7 +210,13 @@ class _MobileNumberVerifyState extends State<MobileNumberVerify> {
           RaisedButton(
             onPressed: () {
               if (_formkey.currentState.validate()) {
-                Navigator.pushNamed(context, '/verify_screen');
+                try{
+                  AuthHelper().phoneAuth(phoneNumber: _mobileNumberController.text,context: context);
+                } catch(e){
+                  print(e);
+                }
+
+                _mobileNumberController.clear();
               }
             },
             padding: EdgeInsets.all(0),
