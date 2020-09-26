@@ -1,8 +1,6 @@
 # pikngrocers_client
 
 A new Flutter application.
-hello everyone
-hi everyone
 
 ## Getting Started
 
