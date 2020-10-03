@@ -32,7 +32,7 @@ class _DelayedListState extends State<DelayedList> {
   Widget build(BuildContext context) {
     Timer timer = Timer(Duration(seconds: 3), () {
       setState(() {
-        isLoading = true;
+        isLoading = false;
       });
     });
 
