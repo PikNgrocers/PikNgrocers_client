@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pikngrocers_client/constants.dart';
+import 'package:pikngrocers_client/screens/user_location.dart';
 import 'package:pikngrocers_client/utils/auth_helper.dart';
+import 'package:pikngrocers_client/utils/database.dart';
 
 class MobileNumberVerify extends StatefulWidget {
   @override
@@ -103,28 +106,23 @@ class _MobileNumberVerifyState extends State<MobileNumberVerify> {
                           SizedBox(
                             height: 5,
                           ),
-                          RaisedButton.icon(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/login');
-                            },
-                            color: Colors.white,
-                            textColor: Colors.black87,
-                            icon: Icon(Icons.mail),
-                            label: Text('Continue with Email'),
-                          ),
                           RaisedButton(
                             onPressed: () async {
                               try {
                                 setState(() {
                                   _loader = true;
                                 });
-                                final user =
+                                User user =
                                     await AuthHelper().signInWithGoogle();
                                 if (user == null) {
                                   print("user is null");
                                 } else {
-                                  Navigator.pushReplacementNamed(
-                                      context, '/home');
+                                  try{
+                                    Database().updateUserData(uid: user.uid,email: user.email,phno: user.phoneNumber,photoUrl: user.photoURL);
+                                  }catch(e){
+                                    print(e);
+                                  }
+                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LocationScreen(uid: user.uid,)), (route) => false);
                                 }
                               } catch (e) {
                                 setState(() {
@@ -215,7 +213,6 @@ class _MobileNumberVerifyState extends State<MobileNumberVerify> {
                 } catch(e){
                   print(e);
                 }
-
                 _mobileNumberController.clear();
               }
             },

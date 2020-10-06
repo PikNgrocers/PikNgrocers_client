@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pikngrocers_client/constants.dart';
+import 'package:pikngrocers_client/screens/user_location.dart';
+import 'package:pikngrocers_client/utils/database.dart';
 
 class AuthHelper {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -17,7 +19,6 @@ class AuthHelper {
     );
 
     final result = await _auth.signInWithCredential(credential);
-    print('>>>>>>>>>>>>>>>>>>>>$result');
     return result.user;
   }
 
@@ -29,8 +30,13 @@ class AuthHelper {
         Navigator.of(context).pop();
         final result = await _auth.signInWithCredential(credential);
         if (result.user != null) {
-          print(result.user);
-          Navigator.pushReplacementNamed(context, '/home');
+          User user = result.user;
+          try{
+            Database().updateUserData(uid: user.uid,email: user.email,phno: user.phoneNumber,photoUrl: user.photoURL);
+          } catch(e){
+            print(e);
+          }
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LocationScreen(uid: result.user.uid,)), (route) => false);
         } else {
           print("Error");
         }
@@ -152,8 +158,13 @@ class OtpEnterScreen extends StatelessWidget {
                         smsCode: _otpController.text);
                     final result = await _auth.signInWithCredential(credential);
                     if (result.user != null) {
-                      print(result.user);
-                      Navigator.pushReplacementNamed(context, '/home');
+                      User user = result.user;
+                      try{
+                        Database().updateUserData(uid: user.uid,email: user.email,phno: user.phoneNumber,photoUrl: user.photoURL);
+                      } catch(e){
+                        print(e);
+                      }
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LocationScreen(uid: result.user.uid,)), (route) => false);
                     } else {
                       print("Error");
                     }

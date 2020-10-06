@@ -1,17 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pikngrocers_client/constants.dart';
-import 'package:pikngrocers_client/screens/profileheader.dart';
 import 'package:pikngrocers_client/screens/user.dart';
+import 'package:pikngrocers_client/utils/auth_helper.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({
     Key key,
-    @required this.user,
   }) : super(key: key);
-  final User user;
-  final sampleUser = const User(
+  final sampleUser = const UserDisp(
     displayName: 'Andrea Brews',
     username: '@biz84',
     photoUrl:
@@ -22,140 +19,149 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              color: kAccountColor,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    child: Center(
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          sampleUser.photoUrl,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                color: kAccountColor,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      child: Center(
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                            sampleUser.photoUrl,
+                          ),
+                          backgroundColor: Colors.black12,
+                          radius: 60,
                         ),
-                        backgroundColor: Colors.black12,
-                        radius: 60,
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 40,
-                      ),
-                      Text(
-                        sampleUser.displayName,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {})
-                    ],
-                  ),
-                  Text(
-                    sampleUser.username,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white70, fontSize: 18),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 40,
+                        ),
+                        Text(
+                          sampleUser.displayName,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        IconButton(
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {})
+                      ],
+                    ),
+                    Text(
+                      sampleUser.username,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.white70, fontSize: 18),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Address',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          IconButton(
-                              icon: Icon(
-                                Icons.edit,
-                                color: kAccountColor,
-                              ),
-                              onPressed: () {
-                                showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    context: context,
-                                    builder: (context) {
-                                      return AddressBottomSheet();
-                                    });
-                              })
-                        ],
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.start,
+              Container(
+                margin: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('No:06, 3rd street, sriram nagar[extn],'),
-                            Text('Madhakottai road,'),
-                            Text('Thanjavur - 613005'),
+                            Text(
+                              'Address',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            IconButton(
+                                icon: Icon(
+                                  Icons.edit,
+                                  color: kAccountColor,
+                                ),
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                      isScrollControlled: true,
+                                      context: context,
+                                      builder: (context) {
+                                        return AddressBottomSheet();
+                                      });
+                                })
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Mobile number',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.edit,
-                            color: kAccountColor,
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text('No:06, 3rd street, sriram nagar[extn],'),
+                              Text('Madhakottai road,'),
+                              Text('Thanjavur - 613005'),
+                            ],
                           ),
-                          onPressed: () {})
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Email id',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.edit,
-                            color: kAccountColor,
-                          ),
-                          onPressed: () {})
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Mobile number',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        IconButton(
+                            icon: Icon(
+                              Icons.edit,
+                              color: kAccountColor,
+                            ),
+                            onPressed: () {})
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Email id',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        IconButton(
+                            icon: Icon(
+                              Icons.edit,
+                              color: kAccountColor,
+                            ),
+                            onPressed: () {})
+                      ],
+                    ),
+                    FlatButton.icon(onPressed: (){
+                      try{
+                        AuthHelper().logout();
+                      }catch(e){
+                       print(e);
+                      }
+                    }, icon: Icon(Icons.exit_to_app), label: Text('LogOut'),),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

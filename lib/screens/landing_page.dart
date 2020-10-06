@@ -32,6 +32,8 @@ class _LandingPageState extends State<LandingPage> {
             return NoInternet();
           }
           if (snapshot.hasData && snapshot.data != null) {
+
+
             return Home();
           }
           return MobileNumberVerify();

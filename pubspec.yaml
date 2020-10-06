@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  shimmer: ^1.0.0
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -35,7 +35,13 @@ dependencies:
   firebase_auth: ^0.18.0+1
   connectivity: ^0.4.9+3
   google_sign_in: ^4.5.1
-
+  shimmer: ^1.0.0
+  google_maps_flutter: ^1.0.2
+  geocoder: ^0.2.1
+  location: ^3.0.0
+  geoflutterfire: ^2.2.1
+  cloud_firestore: ^0.14.0+2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

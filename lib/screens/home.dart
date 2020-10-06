@@ -6,6 +6,7 @@ import 'package:pikngrocers_client/screens/home_screen.dart';
 import 'package:pikngrocers_client/screens/profile.dart';
 
 class Home extends StatefulWidget {
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -37,22 +38,22 @@ class _HomeState extends State<Home> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('HOME'),
+            label: 'HOME',
             backgroundColor: kHomeColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.category),
-            title: Text('CATEGORIES'),
+            label:'CATEGORIES',
             backgroundColor: kCategoryColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
-            title: Text('CART'),
+            label: 'CART',
             backgroundColor: kCartColor,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
-            title: Text('ACCOUNT'),
+            label: 'ACCOUNT',
             backgroundColor: kAccountColor,
           ),
         ],
