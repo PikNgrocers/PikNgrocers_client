@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pikngrocers_client/constants.dart';
+import 'package:pikngrocers_client/screens/select_shop.dart';
 import 'package:pikngrocers_client/utils/database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class GoogleMapShowTime extends StatefulWidget {
   GoogleMapShowTime({this.uid,this.markerLocation, this.userLocation, this.onTap});
@@ -20,6 +23,12 @@ class _GoogleMapShowTimeState extends State<GoogleMapShowTime> {
   double lat;
   double lon;
 
+  SharedPreferences prefs;
+
+   Future saveValue() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   Future<dynamic> getSetAddress() async {
     lat = widget.markerLocation == null
         ? widget.userLocation.latitude
@@ -30,6 +39,12 @@ class _GoogleMapShowTimeState extends State<GoogleMapShowTime> {
     final addresses = await Geocoder.local
         .findAddressesFromCoordinates(Coordinates(lat, lon));
     return resultAddress = addresses.first.addressLine;
+  }
+
+  @override
+  void initState() {
+    saveValue();
+    super.initState();
   }
 
   @override
@@ -70,13 +85,6 @@ class _GoogleMapShowTimeState extends State<GoogleMapShowTime> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    'LATITUDE : $lat,\nLONGITUDE : $lon',
-                    style: TextStyle(color: kHomeColor),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
                   FutureBuilder<dynamic>(
                       future: getSetAddress(),
                       builder: (context, snapshot) {
@@ -97,6 +105,9 @@ class _GoogleMapShowTimeState extends State<GoogleMapShowTime> {
                   ),
                   FlatButton(
                     onPressed: () {
+                     prefs.setString('address', resultAddress);
+                     prefs.setDouble('latitude', lat);
+                     prefs.setDouble('longitude', lon);
                       try {
                         Database().customerLocationData(
                           uid: widget.uid,
@@ -104,7 +115,7 @@ class _GoogleMapShowTimeState extends State<GoogleMapShowTime> {
                           lon: lon,
                           address: resultAddress,
                         );
-                        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ShopListScreen()), (route) => false);
                       } catch (e) {
                         print(e);
                       }

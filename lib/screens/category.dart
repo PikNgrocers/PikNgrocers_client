@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pikngrocers_client/category_helpers/showProduct.dart';
 import 'package:pikngrocers_client/constants.dart';
 import 'package:pikngrocers_client/category_types.dart';
-import 'package:pikngrocers_client/screens/detailed_category.dart';
 
 class CategoryPage extends StatefulWidget {
   @override
@@ -10,6 +10,8 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  final String uid = 'EHKnHsHi3GY1zAcjfLs8gKZJdR43';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,38 +25,41 @@ class _CategoryPageState extends State<CategoryPage> {
           style: TextStyle(fontSize: 15, color: kCategoryColor),
         ),
       ),
-     body: SafeArea(
+      body: SafeArea(
         child: Container(
           margin: EdgeInsets.all(10),
           color: Colors.white,
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 150,
+              maxCrossAxisExtent: 200,
               crossAxisSpacing: 5,
               mainAxisSpacing: 5,
               childAspectRatio: 2.5,
             ),
             itemCount: categoryTypes.length,
             itemBuilder: (context, index) {
-              return Container(
+              return FlatButton(
+                padding: EdgeInsets.symmetric(horizontal: 10,vertical: 20),
+                onPressed:  () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CategoryProductList(
+                        uid: uid,
+                        catType: categoryTypes[index].categoryTitle,
+                      ),
+                    ),
+                  );
+                },
                 color: kCategoryColor.withOpacity(0.7),
-                child: ListTile(
-                  title: Text(
+                child: Center(
+                  child: Text(
                     categoryTypes[index].categoryTitle,
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 13,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailedCategory(
-                              categoryTypes[index].categoryTitle,
-                              categoryTypes[index].categoryValue,),
-                        ),);
-                  },
                 ),
               );
             },

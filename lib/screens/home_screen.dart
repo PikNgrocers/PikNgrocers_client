@@ -40,7 +40,10 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Center(child: DelayedList()),
+      body: Container(
+        color: Colors.white,
+        child: Container(),
+      ),
     );
   }
 }
