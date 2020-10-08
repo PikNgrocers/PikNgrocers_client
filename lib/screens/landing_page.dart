@@ -14,10 +14,14 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   var _result;
   SharedPreferences prefs;
+  String vendorId;
+  String shopName;
 
   void getConnection() async {
     _result = await Connectivity().checkConnectivity();
     prefs = await SharedPreferences.getInstance();
+    vendorId = prefs.get('vendorId');
+    shopName = prefs.get('shopName');
   }
 
   @override
@@ -35,7 +39,7 @@ class _LandingPageState extends State<LandingPage> {
             return NoInternet();
           }
           if (snapshot.hasData && snapshot.data != null) {
-            return Home(vendorId: prefs.getString('vendorId'),shopName: prefs.get('shopName'),);
+            return Home(vendorId: vendorId,shopName: shopName,);
           }
           return MobileNumberVerify();
         });

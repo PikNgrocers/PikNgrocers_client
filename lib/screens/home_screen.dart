@@ -1,14 +1,17 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pikngrocers_client/constants.dart';
 import 'package:pikngrocers_client/screens/select_shop.dart';
+import 'package:pikngrocers_client/utils/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({this.shopName});
+  HomePage({this.shopName, this.vendorId});
   final String shopName;
+  final String vendorId;
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -30,9 +33,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kHomeColor.withOpacity(0.1),
       appBar: AppBar(
-        backgroundColor: kHomeColor,
+        backgroundColor: Colors.white,
         title: FlatButton.icon(
           onPressed: () {
             Navigator.push(
@@ -47,25 +50,193 @@ class _HomePageState extends State<HomePage> {
           },
           icon: Icon(
             Icons.edit,
-            color: Colors.white,
+            color: kHomeColor,
           ),
           label: Column(
             children: [
               Text(
                 '${widget.shopName}',
-                style: TextStyle(color: Colors.white, fontSize: 13),
+                style: TextStyle(color: kHomeColor, fontSize: 17),
               ),
               Text(
                 'Change shop',
-                style: TextStyle(color: Colors.white, fontSize: 10),
+                style: TextStyle(color: kHomeColor, fontSize: 13),
               ),
             ],
           ),
         ),
       ),
-      body: Container(
-        color: Colors.white,
-        child: Container(),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                'Store Specials',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              homeParts(context,
+                  Database().homePartOneData(vendorId: widget.vendorId)),
+              SizedBox(
+                height: 10,
+              ),
+              //TODO:think about placing grid view here
+              // Text(
+              //   'Shop By Category',
+              //   style: TextStyle(fontWeight: FontWeight.bold),
+              // ),
+              // SizedBox(
+              //   height: 10,
+              // ),
+              Text(
+                'Best Offers',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              homeParts(context,
+                  Database().homePartTwoData(vendorId: widget.vendorId)),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Product LessThan ₹100',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              homeParts(context,
+                  Database().homePartThreeData(vendorId: widget.vendorId)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container homeParts(BuildContext context, Stream<QuerySnapshot> types) {
+    return Container(
+      height: 210,
+      child: StreamBuilder<QuerySnapshot>(
+        stream: types,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something happen unusual');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              height: 190,
+              width: 150,
+              child: Card(
+                color: Colors.white24,
+              ),
+            );
+          }
+
+          return ListView.builder(
+              itemCount: snapshot.data.docs.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                var dat = snapshot.data.docs;
+                return Card(
+                  elevation: 3,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    height: 190,
+                    width: 150,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Center(
+                          child: Image.asset(
+                            'assets/images/basket.png',
+                            height: 90,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                dat[index].data()['Offer_price'] == 0
+                                    ? Text(
+                                        '₹${dat[index].data()['Price'].toString()}',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    : Row(
+                                        children: [
+                                          Text(
+                                            '₹${dat[index].data()['Offer_price'].toString()}',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            '₹${dat[index].data()['Price'].toString()}',
+                                            style: TextStyle(
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.7),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 5, vertical: 2),
+                                  child: Text(
+                                    '${dat[index].data()['Product_Quantity']}',
+                                    style: TextStyle(fontSize: 8),
+                                  ),
+                                ),
+                                Text(
+                                  '${dat[index].data()['Product_Name']}',
+                                  style: TextStyle(
+                                      fontSize: 13, color: Colors.blue),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        FlatButton(
+                          onPressed: () {},
+                          child: Text('Add To Cart'),
+                          color: kCartColor,
+                          textColor: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+        },
       ),
     );
   }
@@ -129,8 +300,6 @@ class ShimmerList extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           offset += 5;
           time = 800 + offset;
-
-          print(time);
 
           return Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),

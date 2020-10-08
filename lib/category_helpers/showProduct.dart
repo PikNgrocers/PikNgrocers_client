@@ -80,7 +80,7 @@ class _ProductListViewBuilderHelpState extends State<ProductListViewBuilderHelp>
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    doc[index].data()['Offer_price'] == null
+                    doc[index].data()['Offer_price'] == 0
                         ? Text(
                             'Price : ₹${doc[index].data()['Price'].toString()}',
                             style: TextStyle(

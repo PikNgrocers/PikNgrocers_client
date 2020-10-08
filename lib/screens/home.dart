@@ -22,18 +22,14 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
+        physics: NeverScrollableScrollPhysics(),
         controller: _pageController,
         children: [
-          HomePage(shopName: widget.shopName,),
+          HomePage(shopName: widget.shopName,vendorId: widget.vendorId,),
           CategoryPage(vendorId: widget.vendorId,),
           CartPage(),
           ProfilePage(),
         ],
-        onPageChanged: (page){
-          setState(() {
-            _currentIndex = page;
-          });
-        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         iconSize: 15.0,

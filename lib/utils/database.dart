@@ -43,4 +43,25 @@ class Database {
         .where('Product_category', isEqualTo: catType)
         .snapshots();
   }
+
+  homePartOneData({String vendorId}) {
+    return products
+        .where('vendor_Id', isEqualTo: vendorId)
+        .limit(20)
+        .snapshots();
+  }
+  homePartTwoData({String vendorId}) {
+    return products
+        .where('vendor_Id', isEqualTo: vendorId)
+        .where('Offer_price',isGreaterThan: 0)
+        .limit(20)
+        .snapshots();
+  }
+  homePartThreeData({String vendorId}) {
+    return products
+        .where('vendor_Id', isEqualTo: vendorId)
+        .where('Price',isLessThan: 100)
+        .limit(20)
+        .snapshots();
+  }
 }
