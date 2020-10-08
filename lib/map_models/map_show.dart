@@ -115,7 +115,7 @@ class _GoogleMapShowTimeState extends State<GoogleMapShowTime> {
                           lon: lon,
                           address: resultAddress,
                         );
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ShopListScreen()), (route) => false);
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ShopListScreen(lat: lat,lon: lon,)), (route) => false);
                       } catch (e) {
                         print(e);
                       }

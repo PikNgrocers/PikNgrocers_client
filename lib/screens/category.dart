@@ -5,12 +5,22 @@ import 'package:pikngrocers_client/constants.dart';
 import 'package:pikngrocers_client/category_types.dart';
 
 class CategoryPage extends StatefulWidget {
+  final String vendorId;
+  CategoryPage({this.vendorId});
+
   @override
   _CategoryPageState createState() => _CategoryPageState();
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  final String uid = 'EHKnHsHi3GY1zAcjfLs8gKZJdR43';
+  String uid;
+
+  @override
+  void initState() {
+    uid = widget.vendorId;
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {

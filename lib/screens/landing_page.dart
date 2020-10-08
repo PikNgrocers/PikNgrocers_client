@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pikngrocers_client/screens/home.dart';
 import 'package:pikngrocers_client/screens/mobile_get_number.dart';
 import 'package:pikngrocers_client/utils/nointernet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -12,9 +13,11 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   var _result;
+  SharedPreferences prefs;
 
   void getConnection() async {
     _result = await Connectivity().checkConnectivity();
+    prefs = await SharedPreferences.getInstance();
   }
 
   @override
@@ -32,9 +35,7 @@ class _LandingPageState extends State<LandingPage> {
             return NoInternet();
           }
           if (snapshot.hasData && snapshot.data != null) {
-
-
-            return Home();
+            return Home(vendorId: prefs.getString('vendorId'),shopName: prefs.get('shopName'),);
           }
           return MobileNumberVerify();
         });

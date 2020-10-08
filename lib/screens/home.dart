@@ -6,6 +6,9 @@ import 'package:pikngrocers_client/screens/home_screen.dart';
 import 'package:pikngrocers_client/screens/profile.dart';
 
 class Home extends StatefulWidget {
+  final String vendorId;
+  final String shopName;
+  Home({this.vendorId,this.shopName});
 
   @override
   _HomeState createState() => _HomeState();
@@ -21,8 +24,8 @@ class _HomeState extends State<Home> {
       body: PageView(
         controller: _pageController,
         children: [
-          HomePage(),
-          CategoryPage(),
+          HomePage(shopName: widget.shopName,),
+          CategoryPage(vendorId: widget.vendorId,),
           CartPage(),
           ProfilePage(),
         ],

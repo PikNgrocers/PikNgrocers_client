@@ -1,10 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pikngrocers_client/constants.dart';
-import 'package:pikngrocers_client/screens/user_location.dart';
 import 'package:pikngrocers_client/utils/auth_helper.dart';
-import 'package:pikngrocers_client/utils/database.dart';
 
 class MobileNumberVerify extends StatefulWidget {
   @override
@@ -112,18 +109,7 @@ class _MobileNumberVerifyState extends State<MobileNumberVerify> {
                                 setState(() {
                                   _loader = true;
                                 });
-                                User user =
-                                    await AuthHelper().signInWithGoogle();
-                                if (user == null) {
-                                  print("user is null");
-                                } else {
-                                  try{
-                                    Database().updateUserData(uid: user.uid,email: user.email,phno: user.phoneNumber,photoUrl: user.photoURL);
-                                  }catch(e){
-                                    print(e);
-                                  }
-                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LocationScreen(uid: user.uid,)), (route) => false);
-                                }
+                                    await AuthHelper().signInWithGoogle(context);
                               } catch (e) {
                                 setState(() {
                                   _loader = false;

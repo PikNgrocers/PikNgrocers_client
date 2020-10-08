@@ -3,41 +3,64 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pikngrocers_client/constants.dart';
 import 'package:pikngrocers_client/screens/select_shop.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
+  HomePage({this.shopName});
+  final String shopName;
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  double lat, lon;
+  getSharedPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    lat = prefs.getDouble('latitude');
+    lon = prefs.getDouble('longitude');
+  }
+
+  @override
+  void initState() {
+    getSharedPreference();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: kHomeColor,
-        title: Row(
-          children: [
-            Column(
-              children: [
-                Text(
-                  'ShopName',
-                  style: TextStyle(color: Colors.white, fontSize: 13),
+        title: FlatButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ShopListScreen(
+                  lat: lat,
+                  lon: lon,
                 ),
-                Text(
-                  'city-600015',
-                  style: TextStyle(color: Colors.white, fontSize: 10),
-                ),
-              ],
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ShopListScreen()));
-              },
-              icon: Icon(Icons.edit,),
-            ),
-          ],
+              ),
+            );
+          },
+          icon: Icon(
+            Icons.edit,
+            color: Colors.white,
+          ),
+          label: Column(
+            children: [
+              Text(
+                '${widget.shopName}',
+                style: TextStyle(color: Colors.white, fontSize: 13),
+              ),
+              Text(
+                'Change shop',
+                style: TextStyle(color: Colors.white, fontSize: 10),
+              ),
+            ],
+          ),
         ),
       ),
       body: Container(

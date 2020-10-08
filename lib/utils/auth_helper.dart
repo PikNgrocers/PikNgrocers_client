@@ -8,7 +8,7 @@ import 'package:pikngrocers_client/utils/database.dart';
 
 class AuthHelper {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  signInWithGoogle() async {
+  signInWithGoogle(BuildContext context) async {
     final GoogleSignInAccount _googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication _googleAuth =
         await _googleUser.authentication;
@@ -19,7 +19,17 @@ class AuthHelper {
     );
 
     final result = await _auth.signInWithCredential(credential);
-    return result.user;
+    if (result.user != null) {
+      User user = result.user;
+      try{
+        Database().updateUserData(uid: user.uid,email: user.email,phno: user.phoneNumber,photoUrl: user.photoURL);
+      } catch(e){
+        print(e);
+      }
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LocationScreen(uid: result.user.uid,)), (route) => false);
+    } else {
+      print("Error");
+    }
   }
 
   phoneAuth({String phoneNumber, BuildContext context}) async {
