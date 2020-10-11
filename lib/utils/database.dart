@@ -49,7 +49,7 @@ class Database {
               })
           .toList(),
       'TotalAmount': total,
-      'OrderStatus': 'Requested',
+      'OrderStatus': 'Waiting',//Accepted,Packed
     });
   }
 
@@ -67,6 +67,10 @@ class Database {
         .where('vendor_Id', isEqualTo: uid)
         .where('Product_category', isEqualTo: catType)
         .snapshots();
+  }
+
+  profileData({String userId}){
+    return customers.doc(userId).get();
   }
 
   homePartOneData({String vendorId}) {
@@ -90,5 +94,9 @@ class Database {
         .where('Price', isLessThan: 100)
         .limit(20)
         .snapshots();
+  }
+
+  orderDetails({String userId}){
+    return orders.where('UserId',isEqualTo: userId).snapshots();
   }
 }

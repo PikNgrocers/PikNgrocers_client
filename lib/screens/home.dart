@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
             vendorId: widget.vendorId,
           ),
           CartScreen(vendorId: widget.vendorId,userId: widget.userId,),
-          ProfilePage(),
+          ProfilePage(userId: widget.userId,),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
