@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:pikngrocers_client/cart_helpers/cart_model.dart';
 import 'package:pikngrocers_client/constants.dart';
 import 'package:pikngrocers_client/utils/database.dart';
+import 'package:provider/provider.dart';
 
 class CategoryProductList extends StatelessWidget {
   final String uid;
   final String catType;
   CategoryProductList({this.uid, this.catType});
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +61,16 @@ class ProductListViewBuilderHelp extends StatefulWidget {
   });
 
   @override
-  _ProductListViewBuilderHelpState createState() => _ProductListViewBuilderHelpState();
+  _ProductListViewBuilderHelpState createState() =>
+      _ProductListViewBuilderHelpState();
 }
 
-class _ProductListViewBuilderHelpState extends State<ProductListViewBuilderHelp> {
+class _ProductListViewBuilderHelpState
+    extends State<ProductListViewBuilderHelp> {
   @override
   Widget build(BuildContext context) {
     var doc = widget.snapshot.data.docs;
+    final cart = Provider.of<Cart>(context);
     return ListView.builder(
         itemCount: doc.length,
         itemBuilder: (context, index) {
@@ -75,7 +79,7 @@ class _ProductListViewBuilderHelpState extends State<ProductListViewBuilderHelp>
             elevation: 3,
             child: ListTile(
               leading: Image.asset('assets/images/basket.png'),
-              subtitle : Container(
+              subtitle: Container(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -135,12 +139,34 @@ class _ProductListViewBuilderHelpState extends State<ProductListViewBuilderHelp>
                           ),
                           padding: EdgeInsets.symmetric(
                               horizontal: 20, vertical: 10),
-                          child: Text(
-                              '${doc[index].data()['Product_Quantity']}'),
+                          child:
+                              Text('${doc[index].data()['Product_Quantity']}'),
                         ),
                         FlatButton(
                           onPressed: () {
-
+                            if (cart.items
+                                .containsKey(doc[index].data()['Product_Id'])) {
+                              Scaffold.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Already Added to cart'),
+                                  duration: Duration(seconds: 1),
+                                ),
+                              );
+                              return;
+                            }
+                            int offer = doc[index].data()['Offer_price'];
+                            int price = doc[index].data()['Price'];
+                            cart.addItem(
+                              productId: doc[index].data()['Product_Id'],
+                              price: offer == 0 ? price : offer,
+                              productName: doc[index].data()['Product_Name'],
+                            );
+                            Scaffold.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Product Added'),
+                                duration: Duration(seconds: 1),
+                              ),
+                            );
                           },
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),

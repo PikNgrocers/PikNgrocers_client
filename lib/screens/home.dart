@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pikngrocers_client/constants.dart';
-import 'package:pikngrocers_client/screens/cart.dart';
-import 'package:pikngrocers_client/screens/category.dart';
+import 'package:pikngrocers_client/screens/cart_screen.dart';
+import 'package:pikngrocers_client/screens/category_screen.dart';
 import 'package:pikngrocers_client/screens/home_screen.dart';
 import 'package:pikngrocers_client/screens/profile.dart';
 
 class Home extends StatefulWidget {
   final String vendorId;
   final String shopName;
-  Home({this.vendorId,this.shopName});
+  final String userId;
+  Home({this.vendorId, this.shopName, this.userId});
 
   @override
   _HomeState createState() => _HomeState();
@@ -25,9 +26,15 @@ class _HomeState extends State<Home> {
         physics: NeverScrollableScrollPhysics(),
         controller: _pageController,
         children: [
-          HomePage(shopName: widget.shopName,vendorId: widget.vendorId,),
-          CategoryPage(vendorId: widget.vendorId,),
-          CartPage(),
+          HomePage(
+            shopName: widget.shopName,
+            vendorId: widget.vendorId,
+            userId: widget.userId,
+          ),
+          CategoryPage(
+            vendorId: widget.vendorId,
+          ),
+          CartScreen(),
           ProfilePage(),
         ],
       ),
@@ -42,7 +49,7 @@ class _HomeState extends State<Home> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.category),
-            label:'CATEGORIES',
+            label: 'CATEGORIES',
             backgroundColor: kCategoryColor,
           ),
           BottomNavigationBarItem(
@@ -56,7 +63,7 @@ class _HomeState extends State<Home> {
             backgroundColor: kAccountColor,
           ),
         ],
-        onTap: (index){
+        onTap: (index) {
           setState(() {
             _currentIndex = index;
           });

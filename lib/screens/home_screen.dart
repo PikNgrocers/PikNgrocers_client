@@ -2,16 +2,20 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pikngrocers_client/cart_helpers/cart_model.dart';
 import 'package:pikngrocers_client/constants.dart';
+import 'package:pikngrocers_client/home_models/product_model.dart';
 import 'package:pikngrocers_client/screens/select_shop.dart';
 import 'package:pikngrocers_client/utils/database.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({this.shopName, this.vendorId});
+  HomePage({this.shopName, this.vendorId, this.userId});
   final String shopName;
   final String vendorId;
+  final String userId;
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -80,19 +84,12 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 10,
               ),
-              homeParts(context,
-                  Database().homePartOneData(vendorId: widget.vendorId)),
+              HomeParts(
+                  userId: widget.userId,
+                  types: Database().homePartOneData(vendorId: widget.vendorId)),
               SizedBox(
                 height: 10,
               ),
-              //TODO:think about placing grid view here
-              // Text(
-              //   'Shop By Category',
-              //   style: TextStyle(fontWeight: FontWeight.bold),
-              // ),
-              // SizedBox(
-              //   height: 10,
-              // ),
               Text(
                 'Best Offers',
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -100,8 +97,9 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 10,
               ),
-              homeParts(context,
-                  Database().homePartTwoData(vendorId: widget.vendorId)),
+              HomeParts(
+                  userId: widget.userId,
+                  types: Database().homePartTwoData(vendorId: widget.vendorId)),
               SizedBox(
                 height: 10,
               ),
@@ -112,16 +110,29 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 10,
               ),
-              homeParts(context,
-                  Database().homePartThreeData(vendorId: widget.vendorId)),
+              HomeParts(
+                  userId: widget.userId,
+                  types:
+                      Database().homePartThreeData(vendorId: widget.vendorId)),
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Container homeParts(BuildContext context, Stream<QuerySnapshot> types) {
+class HomeParts extends StatelessWidget {
+  const HomeParts({
+    this.userId,
+    this.types,
+  });
+  final String userId;
+  final Stream<QuerySnapshot> types;
+
+  @override
+  Widget build(BuildContext context) {
+    final cart = Provider.of<Cart>(context);
     return Container(
       height: 210,
       child: StreamBuilder<QuerySnapshot>(
@@ -130,112 +141,164 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.hasError) {
             return Text('Something happen unusual');
           }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Container(
-              height: 190,
-              width: 150,
-              child: Card(
-                color: Colors.white24,
-              ),
-            );
+          if (snapshot.connectionState == ConnectionState.active) {
+            if (snapshot.data.docs.length == 0) {
+              return Container(
+                height: 190,
+                width: 150,
+                child: Center(
+                  child: Text('No Products to Display'),
+                ),
+              );
+            } else {
+              List<Product> _productList = snapshot.data.docs
+                  .map((e) => Product(
+                        productCat: e.data()['Product_category'],
+                        productId: e.data()['Product_Id'],
+                        productQuantity: e.data()['Product_Quantity'],
+                        productName: e.data()['Product_Name'],
+                        price: e.data()['Price'],
+                        offerPrice: e.data()['Offer_price'],
+                        vendorId: e.data()['vendor_Id'],
+                      ))
+                  .toList();
+
+              return Container(
+                height: 190,
+                width: 150,
+                child: ListView.builder(
+                    itemCount: _productList.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        elevation: 3,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          height: 190,
+                          width: 150,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Center(
+                                child: Image.asset(
+                                  'assets/images/basket.png',
+                                  height: 90,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Expanded(
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      _productList[index].offerPrice == 0
+                                          ? Text(
+                                              '₹${_productList[index].price.toString()}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 12,
+                                              ),
+                                            )
+                                          : Row(
+                                              children: [
+                                                Text(
+                                                  '₹${_productList[index].offerPrice.toString()}',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  '₹${_productList[index].price.toString()}',
+                                                  style: TextStyle(
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.withOpacity(0.7),
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5, vertical: 2),
+                                        child: Text(
+                                          '${_productList[index].productQuantity}',
+                                          style: TextStyle(fontSize: 8),
+                                        ),
+                                      ),
+                                      Text(
+                                        '${_productList[index].productName}',
+                                        style: TextStyle(
+                                            fontSize: 13, color: Colors.blue),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              FlatButton(
+                                onPressed: () {
+                                  if (cart.items.containsKey(
+                                      _productList[index].productId)) {
+                                    Scaffold.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Already Added to cart'),
+                                        duration: Duration(seconds: 1),
+                                      ),
+                                    );
+                                    return;
+                                  }
+                                  int offer = _productList[index].offerPrice;
+                                  int price = _productList[index].price;
+                                  cart.addItem(
+                                    productName:
+                                        _productList[index].productName,
+                                    productId: _productList[index].productId,
+                                    price: offer == 0 ? price : offer,
+                                  );
+                                  Scaffold.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Product Added'),
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                },
+                                child: Text('Add To Cart'),
+                                color: kCartColor,
+                                textColor: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+              );
+            }
           }
 
-          return ListView.builder(
-              itemCount: snapshot.data.docs.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                var dat = snapshot.data.docs;
-                return Card(
-                  elevation: 3,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    height: 190,
-                    width: 150,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Center(
-                          child: Image.asset(
-                            'assets/images/basket.png',
-                            height: 90,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                dat[index].data()['Offer_price'] == 0
-                                    ? Text(
-                                        '₹${dat[index].data()['Price'].toString()}',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                        ),
-                                      )
-                                    : Row(
-                                        children: [
-                                          Text(
-                                            '₹${dat[index].data()['Offer_price'].toString()}',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            '₹${dat[index].data()['Price'].toString()}',
-                                            style: TextStyle(
-                                              decoration:
-                                                  TextDecoration.lineThrough,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.7),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 2),
-                                  child: Text(
-                                    '${dat[index].data()['Product_Quantity']}',
-                                    style: TextStyle(fontSize: 8),
-                                  ),
-                                ),
-                                Text(
-                                  '${dat[index].data()['Product_Name']}',
-                                  style: TextStyle(
-                                      fontSize: 13, color: Colors.blue),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        FlatButton(
-                          onPressed: () {},
-                          child: Text('Add To Cart'),
-                          color: kCartColor,
-                          textColor: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              });
+          return Container(
+            height: 190,
+            width: 150,
+            child: Card(
+              color: Colors.white24,
+            ),
+          );
         },
       ),
     );

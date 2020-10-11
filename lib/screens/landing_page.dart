@@ -39,7 +39,8 @@ class _LandingPageState extends State<LandingPage> {
             return NoInternet();
           }
           if (snapshot.hasData && snapshot.data != null) {
-            return Home(vendorId: vendorId,shopName: shopName,);
+            User user = snapshot.data;
+            return Home(vendorId: vendorId,shopName: shopName,userId: user.uid,);
           }
           return MobileNumberVerify();
         });
