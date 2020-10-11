@@ -149,7 +149,7 @@ class _ProductListViewBuilderHelpState
                               Scaffold.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text('Already Added to cart'),
-                                  duration: Duration(seconds: 1),
+                                  duration: Duration(milliseconds: 100),
                                 ),
                               );
                               return;

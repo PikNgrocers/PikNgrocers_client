@@ -47,7 +47,7 @@ class CartItem extends StatelessWidget {
                   icon: Icon(Icons.remove,size: 13,),
                   onPressed: () {
                     if(qty == 1){
-                      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Product Removed'),duration: Duration(seconds: 1),),);
+                      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Product Removed'),duration: Duration(milliseconds: 100),),);
                     }
                     cart.minusItemQuantity(productId: productId);
                   },
@@ -57,7 +57,7 @@ class CartItem extends StatelessWidget {
                   icon: Icon(Icons.add,size: 13,),
                   onPressed: () {
                     if(qty == 5){
-                      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Only 5 Quantity allowed'),duration: Duration(seconds: 1),),);
+                      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Only 5 Quantity allowed'),duration: Duration(milliseconds: 100),),);
                     }
                     cart.plusItemQuantity(productId: productId);
                   },

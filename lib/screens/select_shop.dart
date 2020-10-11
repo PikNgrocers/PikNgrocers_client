@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:pikngrocers_client/constants.dart';
-import 'package:pikngrocers_client/screens/home.dart';
+import 'package:pikngrocers_client/screens/landing_page.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -115,10 +115,7 @@ class ShopsListWidget extends StatelessWidget {
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Home(
-                          vendorId: dat.data()['vendor_id'].toString(),
-                          shopName: dat.data()['shop_name'].toString(),
-                        ),
+                        builder: (context) => LandingPage(),
                       ),
                       (route) => false);
                 },

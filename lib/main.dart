@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pikngrocers_client/cart_helpers/cart_model.dart';
-import 'package:pikngrocers_client/screens/home.dart';
 import 'package:pikngrocers_client/screens/landing_page.dart';
 import 'package:pikngrocers_client/screens/mobile_get_number.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,7 +23,6 @@ class MyApp extends StatelessWidget {
         routes: {
           '/':(context) => LandingPage(),
           '/mobile_verify':(context) => MobileNumberVerify(),
-          '/home':(context) => Home(),
         },
       ),
     );

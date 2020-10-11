@@ -6,8 +6,10 @@ class CartModel {
   final String cartId;
   final int price;
   final int qty;
+  final String productId;
 
-  CartModel({this.cartId, this.price, this.productName, this.qty});
+  CartModel(
+      {this.cartId, this.price, this.productName, this.qty, this.productId});
 }
 
 class Cart with ChangeNotifier {
@@ -30,8 +32,10 @@ class Cart with ChangeNotifier {
                 price: price,
                 productName: productName,
                 cartId: DateTime.now().toString(),
+                productId: productId,
               ));
     }
+    totalAmount();
     notifyListeners();
   }
 
@@ -41,33 +45,50 @@ class Cart with ChangeNotifier {
   }
 
   void plusItemQuantity({String productId}) {
-
-    if(_items[productId].qty == 5) {
-      return ;
+    if (_items[productId].qty == 5) {
+      return;
     }
 
     _items.update(
       productId,
       (value) => CartModel(
           productName: value.productName,
+          productId: value.productId,
           price: value.price,
           cartId: value.cartId,
           qty: value.qty + 1),
     );
+    totalAmount();
     notifyListeners();
   }
+
   void minusItemQuantity({String productId}) {
-    if(_items[productId].qty == 1) {
+    if (_items[productId].qty == 1) {
       removeItem(productId: productId);
     }
     _items.update(
       productId,
-          (value) => CartModel(
+      (value) => CartModel(
+          productId: value.productId,
           productName: value.productName,
           price: value.price,
           cartId: value.cartId,
           qty: value.qty - 1),
     );
+    totalAmount();
+    notifyListeners();
+  }
+
+  double totalAmount() {
+    double total = 0.0;
+    _items.forEach((key, value) {
+      total += value.price * value.qty;
+    });
+    return total;
+  }
+
+  void clearCart() {
+    _items.clear();
     notifyListeners();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:pikngrocers_client/cart_helpers/cart_model.dart';
 
 class Database {
   CollectionReference customers =
@@ -11,7 +12,7 @@ class Database {
   CollectionReference products =
       FirebaseFirestore.instance.collection('products');
 
-  CollectionReference carts = FirebaseFirestore.instance.collection('carts');
+  CollectionReference orders = FirebaseFirestore.instance.collection('orders');
 
   final geo = Geoflutterfire();
 
@@ -27,6 +28,28 @@ class Database {
       'email': email,
       'ph_no': phno,
       'photoUrl': photoUrl,
+    });
+  }
+
+  Future<void> addOrders(
+      {String vendorId,
+      String userId,
+      List<CartModel> cartProducts,
+      double total}) async {
+    return await orders.doc().set({
+      'OrderId': DateTime.now().toString(),
+      'UserId': userId,
+      'VendorId': vendorId,
+      'products': cartProducts
+          .map((e) => {
+                'ProductId': e.productId,
+                'ProductName': e.productName,
+                'Quantity': e.qty,
+                'Price': e.price,
+              })
+          .toList(),
+      'TotalAmount': total,
+      'OrderStatus': 'Requested',
     });
   }
 
@@ -66,30 +89,6 @@ class Database {
         .where('vendor_Id', isEqualTo: vendorId)
         .where('Price', isLessThan: 100)
         .limit(20)
-        .snapshots();
-  }
-
-  addToCart(
-      {String userId,
-      String productId,
-      String productName,
-      String vendorId,
-      int price,
-      int offerPrice}) async {
-    return await carts.doc().set({
-      'UserId': userId,
-      'ProductId': productId,
-      'VendorId': vendorId,
-      'ProductName': productName,
-      'Price': offerPrice == 0 ? price : offerPrice,
-      'Quantity': 1,
-    });
-  }
-
-  showCarts({String vendorId, String userId}) {
-    return carts
-        .where('VendorId', isEqualTo: vendorId)
-        .where('UserId', isEqualTo: userId)
         .snapshots();
   }
 }

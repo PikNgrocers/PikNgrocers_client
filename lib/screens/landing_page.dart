@@ -42,7 +42,12 @@ class _LandingPageState extends State<LandingPage> {
             User user = snapshot.data;
             return Home(vendorId: vendorId,shopName: shopName,userId: user.uid,);
           }
-          return MobileNumberVerify();
+          if(snapshot.data == null){
+            return MobileNumberVerify();
+          }
+
+          return Center(child: CircularProgressIndicator(),);
+
         });
   }
 }

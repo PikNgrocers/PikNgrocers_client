@@ -9,7 +9,7 @@ class Home extends StatefulWidget {
   final String vendorId;
   final String shopName;
   final String userId;
-  Home({this.vendorId, this.shopName, this.userId});
+  Home({@required this.vendorId,@required this.shopName,@required this.userId});
 
   @override
   _HomeState createState() => _HomeState();
@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
           CategoryPage(
             vendorId: widget.vendorId,
           ),
-          CartScreen(),
+          CartScreen(vendorId: widget.vendorId,userId: widget.userId,),
           ProfilePage(),
         ],
       ),
