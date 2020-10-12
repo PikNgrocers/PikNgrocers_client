@@ -59,6 +59,8 @@ class ProfilePage extends StatelessWidget {
                                     if (doc[i].data()['OrderStatus'] ==
                                         'Waiting') {
                                       return OrderListTileWidget(
+                                        orderId: doc[i].data()['OrderId'],
+                                        products: doc[i].data()['products'],
                                         tileColor: Colors.orange,
                                         title: 'Order Waiting',
                                         textColor: Colors.white,
@@ -73,48 +75,48 @@ class ProfilePage extends StatelessWidget {
                                     if (doc[i].data()['OrderStatus'] ==
                                         'Accepted') {
                                       return OrderListTileWidget(
-                                        tileColor: Colors.blue,
-                                        title: 'Order Accepted',
-                                        textColor: Colors.white,
-                                        subTitle:
-                                        'Now your products are Packing',
-                                        icon: Icon(
-                                          Icons
-                                              .check_box_outline_blank_sharp,
-                                          color: Colors.white,
-                                        )
-                                      );
+                                          tileColor: Colors.blue,
+                                          title: 'Order Accepted',
+                                          textColor: Colors.white,
+                                          subTitle:
+                                              'Now your products are Packing',
+                                          icon: Icon(
+                                            Icons.check_box_outline_blank_sharp,
+                                            color: Colors.white,
+                                          ));
                                     }
                                     if (doc[i].data()['OrderStatus'] ==
                                         'Packed') {
                                       return OrderListTileWidget(
+                                          orderId: doc[i].data()['OrderId'],
+                                          products: doc[i].data()['products'],
                                           tileColor: Colors.green,
                                           title: 'Ready to Pick',
                                           textColor: Colors.white,
                                           subTitle:
-                                          'Collect your order by visiting the store',
+                                              'Collect your order by visiting the store',
                                           icon: Icon(
-                                            Icons
-                                                .directions_walk,
+                                            Icons.directions_walk,
                                             color: Colors.white,
-                                          )
-                                      );
+                                          ));
                                     }
                                     if (doc[i].data()['OrderStatus'] ==
                                         'Cash Received') {
                                       return OrderListTileWidget(
+                                          orderId: doc[i].data()['OrderId'],
+                                          products: doc[i].data()['products'],
                                           tileColor: Colors.white,
                                           title: 'Order Completed',
                                           textColor: Colors.green,
                                           subTitle: null,
                                           icon: Icon(
-                                            Icons
-                                                .done,
+                                            Icons.done,
                                             color: Colors.green,
-                                          )
-                                      );
+                                          ));
                                     }
-                                    return Center(child: Text('No Orders'),);
+                                    return Center(
+                                      child: Text('No Orders'),
+                                    );
                                   });
                             }
                           }
@@ -132,6 +134,8 @@ class ProfilePage extends StatelessWidget {
 }
 
 class OrderListTileWidget extends StatelessWidget {
+  final String orderId;
+  final List products;
   final Color tileColor;
   final String title;
   final Color textColor;
@@ -139,7 +143,13 @@ class OrderListTileWidget extends StatelessWidget {
   final Icon icon;
 
   OrderListTileWidget(
-      {this.title, this.icon, this.subTitle, this.textColor, this.tileColor});
+      {this.products,
+      this.title,
+      this.icon,
+      this.subTitle,
+      this.textColor,
+      this.tileColor,
+      this.orderId});
 
   @override
   Widget build(BuildContext context) {
@@ -154,12 +164,82 @@ class OrderListTileWidget extends StatelessWidget {
           '$title',
           style: TextStyle(color: textColor),
         ),
-        subtitle: subTitle !=null ? Text(
-          '$subTitle',
-          style: TextStyle(color: textColor),
-        ) : null,
+        leading: IconButton(
+          icon: Icon(
+            Icons.list,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return OrderedProductListWid(
+                    products: products,
+                    orderId: orderId,
+                  );
+                });
+          },
+        ),
+        subtitle: subTitle != null
+            ? Text(
+                '$subTitle',
+                style: TextStyle(color: textColor),
+              )
+            : null,
         trailing: icon,
       ),
+    );
+  }
+}
+
+class OrderedProductListWid extends StatelessWidget {
+  const OrderedProductListWid({
+    Key key,
+    @required this.orderId,
+    @required this.products,
+  }) : super(key: key);
+
+  final List products;
+  final String orderId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey.withOpacity(.9),
+      appBar: AppBar(
+        title: Text(
+          'Order ID: #$orderId',
+          style: TextStyle(color: kAccountColor, fontSize: 13),
+        ),
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: kAccountColor,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
+      body: ListView.builder(
+          itemCount: products.length,
+          itemBuilder: (context, i) {
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              child: ListTile(
+                tileColor: Colors.white,
+                title: Text(
+                  '${products[i]['ProductName']}',
+                  style: TextStyle(color: kAccountColor),
+                ),
+                trailing: Text(
+                  'Qty: x${products[i]['Quantity']}',
+                  style: TextStyle(color: kAccountColor),
+                ),
+              ),
+            );
+          }),
     );
   }
 }
