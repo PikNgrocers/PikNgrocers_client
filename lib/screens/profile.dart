@@ -64,6 +64,7 @@ class ProfilePage extends StatelessWidget {
                                         tileColor: Colors.orange,
                                         title: 'Order Waiting',
                                         textColor: Colors.white,
+                                        iconColor: Colors.white,
                                         subTitle:
                                             'please wait for vendor to accept your order',
                                         icon: Icon(
@@ -75,9 +76,12 @@ class ProfilePage extends StatelessWidget {
                                     if (doc[i].data()['OrderStatus'] ==
                                         'Accepted') {
                                       return OrderListTileWidget(
+                                          orderId: doc[i].data()['OrderId'],
+                                          products: doc[i].data()['products'],
                                           tileColor: Colors.blue,
                                           title: 'Order Accepted',
                                           textColor: Colors.white,
+                                          iconColor: Colors.white,
                                           subTitle:
                                               'Now your products are Packing',
                                           icon: Icon(
@@ -93,6 +97,7 @@ class ProfilePage extends StatelessWidget {
                                           tileColor: Colors.green,
                                           title: 'Ready to Pick',
                                           textColor: Colors.white,
+                                          iconColor: Colors.white,
                                           subTitle:
                                               'Collect your order by visiting the store',
                                           icon: Icon(
@@ -105,6 +110,7 @@ class ProfilePage extends StatelessWidget {
                                       return OrderListTileWidget(
                                           orderId: doc[i].data()['OrderId'],
                                           products: doc[i].data()['products'],
+                                          iconColor: Colors.green,
                                           tileColor: Colors.white,
                                           title: 'Order Completed',
                                           textColor: Colors.green,
@@ -141,6 +147,7 @@ class OrderListTileWidget extends StatelessWidget {
   final Color textColor;
   final String subTitle;
   final Icon icon;
+  final Color iconColor;
 
   OrderListTileWidget(
       {this.products,
@@ -149,6 +156,7 @@ class OrderListTileWidget extends StatelessWidget {
       this.subTitle,
       this.textColor,
       this.tileColor,
+      this.iconColor,
       this.orderId});
 
   @override
@@ -167,7 +175,7 @@ class OrderListTileWidget extends StatelessWidget {
         leading: IconButton(
           icon: Icon(
             Icons.list,
-            color: Colors.white,
+            color: iconColor,
           ),
           onPressed: () {
             showDialog(
